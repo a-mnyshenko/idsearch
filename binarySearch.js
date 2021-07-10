@@ -1,4 +1,4 @@
-const range = initRangeOfNumbers(-3455555, 3455555)
+const range = initRangeOfRandomNumbers(-25000000, 25000000, 10000000)
 
 console.time("Searching complete in:")
 let result = binarySearchProducts(range)
@@ -12,6 +12,10 @@ function initRangeOfNumbers(from, to) {
     array[i] = n
   }
   return array
+}
+
+function initRangeOfRandomNumbers(from, to, length) {
+  return [...Array(length)].map((n) => n = Math.floor(Math.random() * (to - from) + from))
 }
 
 function isNumberEven(num) {
@@ -29,12 +33,12 @@ function binarySearchProducts(arr) {
     let leftLess = arr[l] < arr[r]
 
     if(minValue > arr[l] || minValue > arr[r]) {
-      minValueNext = minValue
+      minValueNext = !leftLess && minValue > arr[l] ? arr[l] : minValue
       minValue = leftLess ? arr[l] : arr[r]
     }
 
     if(maxValue < arr[l] || maxValue < arr[r]) {
-      maxValuePrev = maxValue
+      maxValuePrev = !leftLess && maxValue < arr[r] ? arr[r] : maxValue
       maxValue = leftLess ? arr[r] : arr[l]
     }
 
