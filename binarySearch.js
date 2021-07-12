@@ -12,7 +12,7 @@ console.log(result)
 function initRangeOfNumbers(from, to) {
   const range = Math.abs(from) + Math.abs(to)
   const array = []
-  for(i = 0, n = from; i <= range; ++i, ++n) {
+  for(i = 0, n = from; i <= range; i++, ++n) {
     array[i] = n
   }
   return array
@@ -35,7 +35,7 @@ function binarySearchProducts(arr) {
   let min1, min2, max1, max2
 
   // Start iterate from middle of array l - left iterator, r - right iterator [------##------] [#-------------#]
-  for(l = mid, r = isEven ? mid + 1 : mid; arr[l] || arr[r]; --l, ++r) {
+  for(l = mid, r = isEven ? mid + 1 : mid; l > 0 || r < arr.length; --l, ++r) {
     const lower   = arr[l] < arr[r] ? arr[l] : arr[r],
           higher  = arr[l] < arr[r] ? arr[r] : arr[l]
 
@@ -60,6 +60,8 @@ function binarySearchProducts(arr) {
       max1 = lower, max2 =  higher
     }
   }
+
+  console.log(arr.length)
 
   const result = []
   min2 < 0 && result.push(min1, min2)
