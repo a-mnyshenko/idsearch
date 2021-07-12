@@ -1,7 +1,7 @@
 // Please use --max-old-space-size=4096 and higher for arrays bigger than 100_000_000
 
 console.time("Creating array with random numbers in\t")
-const range = initRangeOfRandomNumbers(100000, 25_000_000, 1000)
+const range = initRangeOfRandomNumbers(-25_000_000, 25_000_000, 50_000_000)
 console.timeEnd("Creating array with random numbers in\t")
 
 console.time("Searching complete in\t\t\t")
