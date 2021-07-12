@@ -1,3 +1,4 @@
+// Please use --max-old-space-size=4096 and higher for arrays bigger than 100_000_000
 
 console.time("Creating array with random numbers in\t")
 var range = initRangeOfRandomNumbers(-25_000_000, 25_000_000, 50_000_000)
@@ -36,7 +37,7 @@ function binarySearchProducts(arr) {
   // Start iterate from middle of array l - left iterator, r - right iterator [------##------] [#-------------#]
   for(l = mid, r = isEven ? mid + 1 : mid; l >= 0; --l, ++r) {
     var lower   = arr[l] < arr[r] ? arr[l] : arr[r],
-          higher  = arr[l] < arr[r] ? arr[r] : arr[l]
+        higher  = arr[l] < arr[r] ? arr[r] : arr[l]
 
     // get 2 lower id's
     if(lower < min2) {
