@@ -1,11 +1,11 @@
 
-console.time("Creating array with random numbers in")
-var range = initRangeOfRandomNumbers(-25_000_000, 25_000_000, 50_000_000)
-console.timeEnd("Creating array with random numbers in")
+console.time("Creating array with random numbers in\t")
+var range = initRangeOfRandomNumbers(-1, 25_000_000, 50_000_000)
+console.timeEnd("Creating array with random numbers in\t")
 
-console.time("Searching complete in")
+console.time("Searching complete in\t\t\t")
 var result = binarySearchProducts(range)
-console.timeEnd("Searching complete in")
+console.timeEnd("Searching complete in\t\t\t")
 console.log(result)
 
 function initRangeOfNumbers(from, to) {
