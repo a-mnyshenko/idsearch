@@ -1,6 +1,6 @@
 
 console.time("Creating array with random numbers in\t")
-var range = initRangeOfRandomNumbers(-1, 25_000_000, 50_000_000)
+var range = initRangeOfRandomNumbers(-25_000_000, 25_000_000, 50_000_000)
 console.timeEnd("Creating array with random numbers in\t")
 
 console.time("Searching complete in\t\t\t")
