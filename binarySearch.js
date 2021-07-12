@@ -1,7 +1,7 @@
 // Please use --max-old-space-size=4096 and higher for arrays bigger than 100_000_000
 
 console.time("Creating array with random numbers in\t")
-const range = initRangeOfRandomNumbers(-25_000_000, 25_000_000, 49_999_999)
+const range = initRangeOfRandomNumbers(100000, 25_000_000, 1000)
 console.timeEnd("Creating array with random numbers in\t")
 
 console.time("Searching complete in\t\t\t")
@@ -35,7 +35,7 @@ function binarySearchProducts(arr) {
   let min1, min2, max1, max2
 
   // Start iterate from middle of array l - left iterator, r - right iterator [------##------] [#-------------#]
-  for(l = mid, r = isEven ? mid + 1 : mid; l >= 0; --l, ++r) {
+  for(l = mid, r = isEven ? mid + 1 : mid; arr[l] || arr[r]; --l, ++r) {
     const lower   = arr[l] < arr[r] ? arr[l] : arr[r],
           higher  = arr[l] < arr[r] ? arr[r] : arr[l]
 
