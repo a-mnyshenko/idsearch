@@ -1,18 +1,29 @@
 // Please use --max-old-space-size=4096 and higher for arrays bigger than 100_000_000
 
-console.time("Creating array with random numbers in\t")
-const range = initRangeOfRandomNumbers(-25_000_000, 25_000_000, 50_000_000)
-console.timeEnd("Creating array with random numbers in\t")
+console.time("Creating array with random numbers in\t\t")
+const range = initRangeOfRandomNumbers(-25_000_000, 25_000_000, 100_000_000)
+console.timeEnd("Creating array with random numbers in\t\t")
 
-console.time("Binary searching complete in\t\t")
-const resultB = binarySearchProducts(range)
-console.timeEnd("Binary searching complete in\t\t")
+console.time("Understandable binary searching complete in\t")
+const resultBinary = binarySearchProducts(range)
+console.timeEnd("Understandable binary searching complete in\t")
 
-console.time("Searching complete in\t\t\t")
-const resultS = searchProducts(range)
-console.timeEnd("Searching complete in\t\t\t")
+console.time("Fast binary searching complete in\t\t")
+const resultFastBinary = fasterBinarySearchProducts(range)
+console.timeEnd("Fast binary searching complete in\t\t")
 
-console.log(resultS)
+console.time("Searching complete in\t\t\t\t")
+const resultDefaultSearch = searchProducts(range)
+console.timeEnd("Searching complete in\t\t\t\t")
+
+console.time("Searching complete in\t\t\t\t")
+const resultForEach = searchForEach(range)
+console.timeEnd("Searching complete in\t\t\t\t")
+
+console.log("\n\nUnderstandable binary: \t\t\t\t", resultBinary)
+console.log("Fast binary: \t\t\t\t\t", resultFastBinary)
+console.log("Default for with 1 oterator: \t\t\t", resultDefaultSearch)
+console.log("ForEach: \t\t\t\t\t", resultForEach)
 
 function initRangeOfNumbers(from, to) {
   const range = Math.abs(from) + Math.abs(to)
@@ -33,9 +44,62 @@ function isNumberEven(num) {
   return !(num % 2)
 }
 
+function fasterBinarySearchProducts(arr) {
+  const isEven = isNumberEven(arr.length)
+  const mid = isEven ? arr.length / 2 - 1 : Math.floor(arr.length / 2)
+  let min1, min2, max1, max2
+
+  // Start iterate from middle of array l - left iterator, r - right iterator [------##------] [#-------------#]
+  for(l = mid, r = isEven ? mid + 1 : mid; l > 0 || r < arr.length; --l, ++r) {
+    // get 2 lower id's
+    if(arr[l] <= min2 || arr[r] <= min2) {
+      const firstLower = arr[l] < arr[r]
+      if (firstLower) {
+        min2 = arr[l] < min1 ? min1 : arr[l] > min1 ? arr[l] : min2
+        min1 = arr[l] < min1 ? arr[l] : min1
+      }
+      else if (!firstLower) {
+        min2 = arr[r] < min1 ? min1 : arr[r] > min1 ? arr[r] : min2
+        min1 = arr[r] < min1 ? arr[r] : min1
+      }
+
+      if(firstLower && arr[r] < min2 || !firstLower && arr[l] < min2) {
+        min2 = firstLower && arr[r] > min1 ? arr[r] : min2
+        min2 = !firstLower && arr[l] > min1 ? arr[l] : min2
+      }
+    }
+    // and 2 higher id's
+    if(arr[l] >= max1 || arr[r] >= max1) {
+      const firstLower = arr[l] < arr[r]
+      if  (firstLower) {
+        max1 = arr[r] > max2 ? max2 : arr[r] < max2 ? arr[r] : max1
+        max2 = arr[r] > max2 ? arr[r] : max2
+      }
+      else if (!firstLower) {
+        max1 = arr[l] > max2 ? max2 :  arr[l] < max2 ? arr[l] : max1
+        max2 = arr[l] > max2 ? arr[l] : max2
+      }
+
+      if(firstLower && arr[l] >= max1 || !firstLower && arr[r] >= max1) {
+        max1 = firstLower && arr[l] > max1 ? arr[l] : max1
+        max1 = !firstLower && arr[r] > max1 ? arr[r] : max1
+      }
+    }
+    if(!min1 && !max1) {
+      const firstLower = arr[l] < arr[r]
+      min1 = firstLower ? arr[l] : arr[r], min2 = firstLower ? arr[r] : arr[l]
+      max1 = firstLower ? arr[r] : arr[l], max2 = firstLower ? arr[l] : arr[r]
+    }
+  }
+  const result = []
+  min2 < 0 && result.push(min1, min2)
+  max1 > 0 && result.push(max1, max2)
+
+  return result
+}
+
 function binarySearchProducts(arr) {
   const isEven = isNumberEven(arr.length)
-
   const mid = isEven ? arr.length / 2 - 1 : Math.floor(arr.length / 2)
   let min1, min2, max1, max2
 
@@ -85,14 +149,40 @@ function searchProducts(arr) {
     }
     // and 2 higher id's
     if(arr[i] > max1) {
+      max1 =  arr[i] > max2 ? max2 : arr[i] < max2 ? arr[i] : max1
       max2 =  arr[i] > max2 ? arr[i] : max2
-      max1 =  arr[i] > max2 ? max2 :  arr[i] < max2 ? arr[i] : max1
     }
     if(!min2 && !max1) {
       min2 = arr[i], min1 = arr[i]
       max1 = arr[i], max2 = arr[i]
     }
   }
+
+  const result = []
+  min2 < 0 && result.push(min1, min2)
+  max1 > 0 && result.push(max1, max2)
+
+  return result
+}
+
+function searchForEach(arr) {
+  let min1, min2, max1, max2
+  arr.forEach(value => {
+    if(value < min2) {
+      min2 = value < min1 ? min1 : value > min1 ? value : min2
+      min1 = value < min1 ? value : min1
+    }
+    // and 2 higher id's
+    if(value > max1) {
+      max1 =  value > max2 ? max2 : value < max2 ? value : max1
+      max2 =  value > max2 ? value : max2
+    }
+    if(!min2 && !max1) {
+      min2 = value, min1 = value
+      max1 = value, max2 = value
+    }
+  });
+    // get 2 lower id's
 
   const result = []
   min2 < 0 && result.push(min1, min2)
