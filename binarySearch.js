@@ -9,7 +9,7 @@
 // Please use --max-old-space-size=4096 and higher for arrays bigger than 100_000_000
 
 console.time("Creating array with random numbers in\t\t")
-const range = initRangeOfRandomNumbers(-25_000_000, 25_000_000, 50_000_000)
+const range = initRangeOfRandomNumbers(-25_000_000, 25_000_000, 100_000_000)
 console.timeEnd("Creating array with random numbers in\t\t")
 
 console.time("Understandable binary searching complete in\t")
@@ -52,18 +52,27 @@ function isNumberEven(num) {
   return !(num % 2)
 }
 
+function compareLess(n1, n2) {
+  return n1 < n2
+}
+
 function binarySearchProducts(arr) {
   const isEven = isNumberEven(arr.length)
   const mid = isEven ? arr.length / 2 - 1 : Math.floor(arr.length / 2)
   let min1, min2, max1, max2
 
+  let lower, higher
+
   // Start iterate from middle of array l - left iterator, r - right iterator [------##------] [#-------------#]
   for(l = mid, r = isEven ? mid + 1 : mid; l > 0 || r < arr.length; --l, ++r) {
-    const lower   = arr[l] < arr[r] ? arr[l] : arr[r],
-          higher  = arr[l] < arr[r] ? arr[r] : arr[l]
+    lower   = arr[l] < arr[r] ? arr[l] : arr[r],
+    higher  = arr[l] < arr[r] ? arr[r] : arr[l]
 
     // get 2 lower id's
     if(lower < min2) {
+      lower   = arr[l] < arr[r] ? arr[l] : arr[r],
+      higher  = arr[l] < arr[r] ? arr[r] : arr[l]
+
       min2 = lower < min1 ? min1 : lower > min1 ? lower : min2
       min1 = lower < min1 ? lower : min1
       if(higher < min2) {
@@ -97,10 +106,6 @@ function fasterBinarySearchProducts(arr) {
   const isEven = isNumberEven(arr.length)
   const mid = isEven ? arr.length / 2 - 1 : Math.floor(arr.length / 2)
   let min1, min2, max1, max2
-
-  function compareLess(n1, n2) {
-    return n1 < n2
-  }
 
   // Start iterate from middle of array l - left iterator, r - right iterator [------##------] [#-------------#]
   for(l = mid, r = isEven ? mid + 1 : mid; l > 0 || r < arr.length; --l, ++r) {
