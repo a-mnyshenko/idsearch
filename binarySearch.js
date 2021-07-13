@@ -98,12 +98,16 @@ function fasterBinarySearchProducts(arr) {
   const mid = isEven ? arr.length / 2 - 1 : Math.floor(arr.length / 2)
   let min1, min2, max1, max2
 
+  function compareLess(n1, n2) {
+    return n1 < n2
+  }
+
   // Start iterate from middle of array l - left iterator, r - right iterator [------##------] [#-------------#]
   for(l = mid, r = isEven ? mid + 1 : mid; l > 0 || r < arr.length; --l, ++r) {
     // get 2 lower id's
     if(arr[l] <= min2 || arr[r] <= min2) {
       const firstLower = arr[l] < arr[r]
-      if (arr[l] < arr[r]) {
+      if (firstLower) {
         min2 = arr[l] < min1 ? min1 : arr[l] > min1 ? arr[l] : min2
         min1 = arr[l] < min1 ? arr[l] : min1
       }
@@ -120,7 +124,7 @@ function fasterBinarySearchProducts(arr) {
     // and 2 higher id's
     if(arr[l] >= max1 || arr[r] >= max1) {
       const firstLower = arr[l] < arr[r]
-      if  (firstLower) {
+      if (firstLower) {
         max1 = arr[r] > max2 ? max2 : arr[r] < max2 ? arr[r] : max1
         max2 = arr[r] > max2 ? arr[r] : max2
       }
