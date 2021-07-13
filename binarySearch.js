@@ -1,3 +1,11 @@
+/*
+    Avg time for array with 100M id's 
+    Understandable binary     650ms
+    Fast binary (optimized)   300ms
+    Default "for"             550ms
+    forEach                   2s"
+*/
+
 // Please use --max-old-space-size=4096 and higher for arrays bigger than 100_000_000
 
 console.time("Creating array with random numbers in\t\t")
@@ -167,6 +175,7 @@ function searchProducts(arr) {
 function searchForEach(arr) {
   let min1, min2, max1, max2
   arr.forEach(value => {
+    // get 2 lower id's
     if(value < min2) {
       min2 = value < min1 ? min1 : value > min1 ? value : min2
       min1 = value < min1 ? value : min1
@@ -181,7 +190,6 @@ function searchForEach(arr) {
       max1 = value, max2 = value
     }
   });
-    // get 2 lower id's
 
   const result = []
   min2 < 0 && result.push(min1, min2)
