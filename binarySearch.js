@@ -12,13 +12,13 @@ console.time("Fast binary searching complete in\t\t")
 const resultFastBinary = fasterBinarySearchProducts(range)
 console.timeEnd("Fast binary searching complete in\t\t")
 
-console.time("Searching complete in\t\t\t\t")
+console.time("Default searching complete in\t\t\t")
 const resultDefaultSearch = searchProducts(range)
-console.timeEnd("Searching complete in\t\t\t\t")
+console.timeEnd("Default searching complete in\t\t\t")
 
-console.time("Searching complete in\t\t\t\t")
+console.time("ForEach searching complete in\t\t\t")
 const resultForEach = searchForEach(range)
-console.timeEnd("Searching complete in\t\t\t\t")
+console.timeEnd("ForEach searching complete in\t\t\t")
 
 console.log("\n\nUnderstandable binary: \t\t\t\t", resultBinary)
 console.log("Fast binary: \t\t\t\t\t", resultFastBinary)
@@ -42,60 +42,6 @@ function initRangeOfRandomNumbers(from, to, length) {
 
 function isNumberEven(num) {
   return !(num % 2)
-}
-
-function fasterBinarySearchProducts(arr) {
-  const isEven = isNumberEven(arr.length)
-  const mid = isEven ? arr.length / 2 - 1 : Math.floor(arr.length / 2)
-  let min1, min2, max1, max2
-
-  // Start iterate from middle of array l - left iterator, r - right iterator [------##------] [#-------------#]
-  for(l = mid, r = isEven ? mid + 1 : mid; l > 0 || r < arr.length; --l, ++r) {
-    // get 2 lower id's
-    if(arr[l] <= min2 || arr[r] <= min2) {
-      const firstLower = arr[l] < arr[r]
-      if (firstLower) {
-        min2 = arr[l] < min1 ? min1 : arr[l] > min1 ? arr[l] : min2
-        min1 = arr[l] < min1 ? arr[l] : min1
-      }
-      else if (!firstLower) {
-        min2 = arr[r] < min1 ? min1 : arr[r] > min1 ? arr[r] : min2
-        min1 = arr[r] < min1 ? arr[r] : min1
-      }
-
-      if(firstLower && arr[r] < min2 || !firstLower && arr[l] < min2) {
-        min2 = firstLower && arr[r] > min1 ? arr[r] : min2
-        min2 = !firstLower && arr[l] > min1 ? arr[l] : min2
-      }
-    }
-    // and 2 higher id's
-    if(arr[l] >= max1 || arr[r] >= max1) {
-      const firstLower = arr[l] < arr[r]
-      if  (firstLower) {
-        max1 = arr[r] > max2 ? max2 : arr[r] < max2 ? arr[r] : max1
-        max2 = arr[r] > max2 ? arr[r] : max2
-      }
-      else if (!firstLower) {
-        max1 = arr[l] > max2 ? max2 :  arr[l] < max2 ? arr[l] : max1
-        max2 = arr[l] > max2 ? arr[l] : max2
-      }
-
-      if(firstLower && arr[l] >= max1 || !firstLower && arr[r] >= max1) {
-        max1 = firstLower && arr[l] > max1 ? arr[l] : max1
-        max1 = !firstLower && arr[r] > max1 ? arr[r] : max1
-      }
-    }
-    if(!min1 && !max1) {
-      const firstLower = arr[l] < arr[r]
-      min1 = firstLower ? arr[l] : arr[r], min2 = firstLower ? arr[r] : arr[l]
-      max1 = firstLower ? arr[r] : arr[l], max2 = firstLower ? arr[l] : arr[r]
-    }
-  }
-  const result = []
-  min2 < 0 && result.push(min1, min2)
-  max1 > 0 && result.push(max1, max2)
-
-  return result
 }
 
 function binarySearchProducts(arr) {
@@ -132,6 +78,59 @@ function binarySearchProducts(arr) {
 
   console.log(arr.length)
 
+  const result = []
+  min2 < 0 && result.push(min1, min2)
+  max1 > 0 && result.push(max1, max2)
+
+  return result
+}
+
+function fasterBinarySearchProducts(arr) {
+  const isEven = isNumberEven(arr.length)
+  const mid = isEven ? arr.length / 2 - 1 : Math.floor(arr.length / 2)
+  let min1, min2, max1, max2
+
+  // Start iterate from middle of array l - left iterator, r - right iterator [------##------] [#-------------#]
+  for(l = mid, r = isEven ? mid + 1 : mid; l > 0 || r < arr.length; --l, ++r) {
+    // get 2 lower id's
+    if(arr[l] <= min2 || arr[r] <= min2) {
+      const firstLower = arr[l] < arr[r]
+      if (firstLower) {
+        min2 = arr[l] < min1 ? min1 : arr[l] > min1 ? arr[l] : min2
+        min1 = arr[l] < min1 ? arr[l] : min1
+      }
+      else  {
+        min2 = arr[r] < min1 ? min1 : arr[r] > min1 ? arr[r] : min2
+        min1 = arr[r] < min1 ? arr[r] : min1
+      }
+
+      if(firstLower && arr[r] < min2 || !firstLower && arr[l] < min2) {
+        min2 = firstLower && arr[r] > min1 ? arr[r] : min2
+        min2 = !firstLower && arr[l] > min1 ? arr[l] : min2
+      }
+    }
+    // and 2 higher id's
+    if(arr[l] >= max1 || arr[r] >= max1) {
+      const firstLower = arr[l] < arr[r]
+      if  (firstLower) {
+        max1 = arr[r] > max2 ? max2 : arr[r] < max2 ? arr[r] : max1
+        max2 = arr[r] > max2 ? arr[r] : max2
+      }
+      else {
+        max1 = arr[l] > max2 ? max2 :  arr[l] < max2 ? arr[l] : max1
+        max2 = arr[l] > max2 ? arr[l] : max2
+      }
+      if(firstLower && arr[l] >= max1 || !firstLower && arr[r] >= max1) {
+        max1 = firstLower && arr[l] > max1 ? arr[l] : max1
+        max1 = !firstLower && arr[r] > max1 ? arr[r] : max1
+      }
+    }
+    if(!min1 && !max1) {
+      const firstLower = arr[l] < arr[r]
+      min1 = firstLower ? arr[l] : arr[r], min2 = firstLower ? arr[r] : arr[l]
+      max1 = firstLower ? arr[r] : arr[l], max2 = firstLower ? arr[l] : arr[r]
+    }
+  }
   const result = []
   min2 < 0 && result.push(min1, min2)
   max1 > 0 && result.push(max1, max2)
