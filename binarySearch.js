@@ -1,15 +1,15 @@
-/*
+/* =====================================
     Avg time for array with 100M id's 
-    Understandable binary     650ms
-    Fast binary (optimized)   300ms
-    Default "for"             550ms
+    Understandable binary     500-650ms
+    Fast binary (optimized)   200-300ms
+    Default "for"             400-550ms
     forEach                   2s"
-*/
+   ===================================== */
 
 // Please use --max-old-space-size=4096 and higher for arrays bigger than 100_000_000
 
 console.time("Creating array with random numbers in\t\t")
-const range = initRangeOfRandomNumbers(-25_000_000, 25_000_000, 100_000_000)
+const range = initRangeOfRandomNumbers(-25_000_000, 25_000_000, 50_000_000)
 console.timeEnd("Creating array with random numbers in\t\t")
 
 console.time("Understandable binary searching complete in\t")
@@ -30,7 +30,7 @@ console.timeEnd("ForEach searching complete in\t\t\t")
 
 console.log("\n\nUnderstandable binary: \t\t\t\t", resultBinary)
 console.log("Fast binary: \t\t\t\t\t", resultFastBinary)
-console.log("Default for with 1 oterator: \t\t\t", resultDefaultSearch)
+console.log("Default for with 1 iterator: \t\t\t", resultDefaultSearch)
 console.log("ForEach: \t\t\t\t\t", resultForEach)
 
 function initRangeOfNumbers(from, to) {
@@ -103,7 +103,7 @@ function fasterBinarySearchProducts(arr) {
     // get 2 lower id's
     if(arr[l] <= min2 || arr[r] <= min2) {
       const firstLower = arr[l] < arr[r]
-      if (firstLower) {
+      if (arr[l] < arr[r]) {
         min2 = arr[l] < min1 ? min1 : arr[l] > min1 ? arr[l] : min2
         min1 = arr[l] < min1 ? arr[l] : min1
       }
